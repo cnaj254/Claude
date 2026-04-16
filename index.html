@@ -7,6 +7,22 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
+  <!-- Morning Check-in Modal -->
+  <div id="checkin-overlay" class="hidden">
+    <div id="checkin-modal">
+      <div class="checkin-header">
+        <div class="checkin-icon">🌅</div>
+        <h2>Morning Check-in</h2>
+        <p id="checkin-subtitle"></p>
+      </div>
+      <div id="checkin-list"></div>
+      <div class="checkin-footer">
+        <button id="checkin-start" class="btn-primary" disabled>Decide all tasks to continue</button>
+      </div>
+    </div>
+  </div>
+
   <header>
     <div class="header-nav">
       <button id="prev-week" class="nav-btn" aria-label="Previous week">&#8592;</button>
@@ -20,6 +36,10 @@
 
   <main>
     <div id="week-grid"></div>
+    <section id="notes-section">
+      <div class="notes-label">📝 Week Notes</div>
+      <textarea id="week-notes" placeholder="Anything to keep in mind this week…"></textarea>
+    </section>
   </main>
 
   <script src="app.js"></script>
