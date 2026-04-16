@@ -7,7 +7,7 @@ const DAY_NAMES = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 const MONTH_NAMES = ['January','February','March','April','May','June',
   'July','August','September','October','November','December'];
 const DAILY_CAP = 5;
-const PRIORITY_LABELS = { high: '🔴 High', medium: '🟡 Med', low: '🟢 Low' };
+const PRIORITY_LABELS = { high: 'High', medium: 'Medium', low: 'Low' };
 const PRIORITY_SHORT  = { high: 'High', medium: 'Med', low: 'Low' };
 
 // ── State ─────────────────────────────────────────────────────────────────────
@@ -174,7 +174,7 @@ function renderCheckinModal() {
   const undecided = checkinDecisions.filter(d => d.decision === null).length;
 
   document.getElementById('checkin-subtitle').textContent =
-    `${total} unfinished task${total!==1?'s':''} from previous days — decide what to do with each to continue.`;
+    `You have ${total} unfinished task${total!==1?'s':''} from previous days. Decide what to do with each before starting today.`;
 
   const list = document.getElementById('checkin-list');
   list.innerHTML = '';
@@ -208,10 +208,10 @@ function renderCheckinActions(i) {
 
   if (item.decision === null) {
     container.innerHTML = `
-      <button class="checkin-btn checkin-btn-today"   data-i="${i}">→ Today</button>
-      <button class="checkin-btn checkin-btn-pick"    data-i="${i}">📅 Pick day</button>
-      <button class="checkin-btn checkin-btn-keep"    data-i="${i}">⏸ Keep</button>
-      <button class="checkin-btn checkin-btn-delete"  data-i="${i}">🗑 Delete</button>
+      <button class="checkin-btn checkin-btn-today"   data-i="${i}">Move to today</button>
+      <button class="checkin-btn checkin-btn-pick"    data-i="${i}">Pick day</button>
+      <button class="checkin-btn checkin-btn-keep"    data-i="${i}">Defer</button>
+      <button class="checkin-btn checkin-btn-delete"  data-i="${i}">Remove</button>
     `;
     container.querySelectorAll('.checkin-btn').forEach(b => b.addEventListener('click', onCheckinAction));
 
@@ -230,9 +230,9 @@ function renderCheckinActions(i) {
     });
 
   } else {
-    const labelMap = { today:'→ Moving to today', keep:'⏸ Kept for later', delete:'🗑 Will be deleted' };
+    const labelMap = { today:'Moving to today', keep:'Deferred', delete:'Will be removed' };
     const label = item.decision.startsWith('date:')
-      ? `📅 Moving to ${formatCheckinDate(item.decision.slice(5))}`
+      ? `Rescheduled to ${formatCheckinDate(item.decision.slice(5))}`
       : labelMap[item.decision] || item.decision;
     container.innerHTML = `<span class="checkin-decided-label">${label}</span><button class="checkin-undo" data-i="${i}">Undo</button>`;
     container.querySelector('.checkin-undo').addEventListener('click', () => {
@@ -460,11 +460,12 @@ function createAddArea(ds, atCap, dayIdx, dayNum) {
   const priRow = document.createElement('div');
   priRow.className = 'priority-row';
 
-  [['high','🔴'],['medium','🟡'],['low','🟢']].forEach(([key, emoji]) => {
+  [['high','High'],['medium','Med'],['low','Low']].forEach(([key, label]) => {
     const b = document.createElement('button');
     b.className = `priority-pick${key===selPriority?' selected':''}`;
-    b.dataset.priority = key; b.textContent = emoji; b.setAttribute('type','button');
+    b.dataset.priority = key; b.setAttribute('type','button');
     b.title = key.charAt(0).toUpperCase()+key.slice(1)+' priority';
+    b.innerHTML = `<span class="pdot pdot-${key}"></span>${label}`;
     b.addEventListener('click', () => {
       selPriority = key;
       priRow.querySelectorAll('.priority-pick').forEach(x => x.classList.toggle('selected', x.dataset.priority===key));
@@ -473,7 +474,7 @@ function createAddArea(ds, atCap, dayIdx, dayNum) {
   });
 
   const timeTog = document.createElement('button');
-  timeTog.className = 'time-toggle'; timeTog.textContent = '🕐'; timeTog.title = 'Set time';
+  timeTog.className = 'time-toggle'; timeTog.textContent = 'Time'; timeTog.title = 'Set time';
   timeTog.setAttribute('type','button');
 
   const timeIn = document.createElement('input');
@@ -517,10 +518,11 @@ function startEdit(li, content, ds, task) {
   priRow.className = 'priority-row edit-priority-row';
   let ePriority = task.priority;
 
-  [['high','🔴'],['medium','🟡'],['low','🟢']].forEach(([key, emoji]) => {
+  [['high','High'],['medium','Med'],['low','Low']].forEach(([key, label]) => {
     const b = document.createElement('button');
     b.className = `priority-pick${key===ePriority?' selected':''}`; b.dataset.priority = key;
-    b.textContent = emoji; b.setAttribute('type','button');
+    b.setAttribute('type','button');
+    b.innerHTML = `<span class="pdot pdot-${key}"></span>${label}`;
     b.addEventListener('click', () => {
       ePriority = key;
       priRow.querySelectorAll('.priority-pick').forEach(x => x.classList.toggle('selected', x.dataset.priority===key));
