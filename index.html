@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weekly Planner</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="header-nav">
+      <button id="prev-week" class="nav-btn" aria-label="Previous week">&#8592;</button>
+      <div class="header-center">
+        <h1 id="week-label"></h1>
+        <button id="today-btn" class="today-btn">Today</button>
+      </div>
+      <button id="next-week" class="nav-btn" aria-label="Next week">&#8594;</button>
+    </div>
+  </header>
+
+  <main>
+    <div id="week-grid"></div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
