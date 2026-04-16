@@ -57,12 +57,12 @@ function formatWeekLabel(dates) {
   const first = dates[0];
   const last = dates[6];
   if (first.getMonth() === last.getMonth()) {
-    return `${MONTH_NAMES[first.getMonth()]} ${first.getDate()}–${last.getDate()}, ${first.getFullYear()}`;
+    return `${MONTH_NAMES[first.getMonth()]} ${first.getDate()}\u2013${last.getDate()}, ${first.getFullYear()}`;
   }
   if (first.getFullYear() === last.getFullYear()) {
-    return `${MONTH_NAMES[first.getMonth()]} ${first.getDate()} – ${MONTH_NAMES[last.getMonth()]} ${last.getDate()}, ${first.getFullYear()}`;
+    return `${MONTH_NAMES[first.getMonth()]} ${first.getDate()} \u2013 ${MONTH_NAMES[last.getMonth()]} ${last.getDate()}, ${first.getFullYear()}`;
   }
-  return `${MONTH_NAMES[first.getMonth()]} ${first.getDate()}, ${first.getFullYear()} – ${MONTH_NAMES[last.getMonth()]} ${last.getDate()}, ${last.getFullYear()}`;
+  return `${MONTH_NAMES[first.getMonth()]} ${first.getDate()}, ${first.getFullYear()} \u2013 ${MONTH_NAMES[last.getMonth()]} ${last.getDate()}, ${last.getFullYear()}`;
 }
 
 // ── Task Mutations ────────────────────────────────────────────────────────────
@@ -159,15 +159,13 @@ function render() {
     const input = document.createElement('input');
     input.type = 'text';
     input.className = 'add-task-input';
-    input.placeholder = 'Add task…';
+    input.placeholder = 'Add task\u2026';
     input.maxLength = 200;
     input.setAttribute('aria-label', `Add task for ${DAY_NAMES[i]} ${date.getDate()}`);
 
     input.addEventListener('keydown', e => {
       if (e.key === 'Enter') {
         addTask(dateStr, input.value);
-        // focus is restored by render, but we need the fresh input
-        // find it after render
         const newInput = document.querySelector(`.day-column[data-date="${dateStr}"] .add-task-input`);
         if (newInput) newInput.focus();
       }
